@@ -8,7 +8,6 @@ var groundLevel;
 var ground;
 var canChangeDirection = false;
 
-
 function setup() {
   createCanvas(windowWidth, windowHeight)
   groundLevel = windowHeight - 200;
@@ -18,7 +17,7 @@ function setup() {
     y: windowHeight / 2,
     vx: 0,
     vy: 0,
-    color: [Math.random(255), Math.random(255), Math.random(255)],
+    color: [random(255), random(255), random(255)],
     bounce: 0.7,
     w: 90,
     h: 90,
@@ -30,7 +29,7 @@ function setup() {
         r.y = groundLevel - r.h
         r.vy *= -r.bounce
         canChangeDirection = false;
-        r.color =  [Math.random(255), Math.random(255), Math.random(255)]
+        r.color =  [random(255), random(255), random(255)]
       } else if (r.y < 0) {
         r.vy *= -r.bounce
       } else {
@@ -41,6 +40,12 @@ function setup() {
         r.x = windowWidth
       } else if (r.x > windowWidth) {
         r.x = 0
+      }
+
+      if (r.vx > 0) {
+        r.vx -= 0.2
+      } else if (r.vx < 0) {
+        r.vx += 0.2
       }
     }
   }
