@@ -4,9 +4,11 @@ const rightMoveBtn = document.querySelector('#rightMove')
 const gravity = 0.9;
 
 var r;
+var obstacles = []
 var groundLevel;
 var ground;
 var canChangeDirection = false;
+var keysPressed = {}
 
 function setup() {
   createCanvas(windowWidth, windowHeight)
@@ -22,6 +24,7 @@ function setup() {
     w: 90,
     h: 90,
     draw: () => {
+      noStroke()
       fill(r.color[0], r.color[1], r.color[2])
       rect(r.x, r.y, r.w, r.h)
       
@@ -49,6 +52,11 @@ function setup() {
       }
     }
   }
+
+  setInterval(() => {
+    obstacle = new Obstacle(windowWidth + 200, groundLevel, 50, random(60, 160))
+    obstacles.push(obstacle)
+  }, random(3000, 5000))
   
   ground = {
     x: 0,
@@ -56,11 +64,25 @@ function setup() {
     w: 5000,
     h: 200,
     draw: () => {
+      noStroke()
       fill("#222")
       rect(ground.x, ground.y, ground.w, ground.h)
     }
   }
 }
+
+function Obstacle(x, y, w, h) {
+  this.x = x
+  this.y = y - h
+  this.w = w
+  this.h = h
+
+  this.draw = () => {
+    noStroke()
+    fill('#ffffff')
+    rect(this.x, this.y, this.w, this.h)
+  }
+} 
 
 function draw() {
   background("#111")
@@ -71,21 +93,31 @@ function draw() {
   r.x += r.vx
   
   ground.draw()
+
+  obstacles.forEach((o) => {
+    o.draw()
+    o.x -= 2
+  })
 }
 
 function keyPressed() {
-    
-  if (keyCode === 32) {
+
+  keysPressed[keyCode] = true
+
+  console.log(keysPressed)
+
+  if (keysPressed[32]) {
     r.vy += 25
-  } else if (keyCode === 39 && canChangeDirection) {
+  } else if (keysPressed[39] && canChangeDirection) {
     r.vx += 5
-  } else if (keyCode === 37 && canChangeDirection) {
+  } else if (keysPressed[37] && canChangeDirection) {
     r.vx -= 5
-  }
-  
+  } 
 }
   
 function keyReleased() {
+  delete keysPressed[keyCode]
+
   r.vx = 0
 }
 
